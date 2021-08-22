@@ -1,9 +1,11 @@
 """
-@Author: Travis Tang
-@Date: 2021.8.18
 @Desc:
 """
+
 from bs4 import BeautifulSoup as Soup
+from .logger import MyLogger
+from src.common.string_tools import String
+
 
 class Paper(object):
     def __init__(self, title, year, url,  authors=[], abstrat=""):
@@ -12,6 +14,10 @@ class Paper(object):
         self.url = url
         self.authors = authors
         self.abstract = abstrat
+        self.reader_desc = ''  # I can add some descriptions to this paper
+
+    def add_desc(self, desc : str):
+        self.reader_desc += desc + '||\n'
 
     def __repr__(self):
         repr_content = f'\nPaper "{self.title}":\n'
@@ -23,12 +29,18 @@ class Paper(object):
 
 
 class PaperList(object):
-    def __init__(self):
-        self.papers = []
+    def __init__(self, papers=[], logger=None):
+        self.name = "PaperList"
+        self.papers = papers
+        self.logger = logger
+
+    @property
+    def size(self):
+        return len(self.papers)
 
     @classmethod
-    def init_from_response(cls, conf_content, year, r_content):
-        _paper_list = PaperList()
+    def init_from_response(cls, conf_content, year, r_content, logger=None):
+        _paper_list = PaperList([], logger)
         page = Soup(r_content, "html.parser")
         # segment of papers
         papers = page.find("div", {"id": conf_content})
@@ -37,7 +49,7 @@ class PaperList(object):
             title_with_href= infobox.find("a", {"class": "align-middle"})
             title = title_with_href.get_text().strip()
             href = title_with_href.get("href")
-            url = f'https://aclanthology.org/{href}.pdf'
+            url = f'https://aclanthology.org{href[:-1]}.pdf'
             #authors
             authors = []
             for author in infobox.find_all("a"):
@@ -45,8 +57,34 @@ class PaperList(object):
             _paper_list.papers.append(Paper(title, year, url, authors))
         return _paper_list
 
+    def add_logger(self, logger: MyLogger):
+        self.logger = logger
+
+    def filter(self, key: str, val: str):
+        filtered = []
+        for paper in self.papers:
+            if String.contain(eval(f'paper.{key}'), val):
+                paper.add_desc(f'filtered by containing "{val}" in {key}')
+                filtered.append(paper)
+        if isinstance(self.logger, MyLogger):
+            self.logger.info(f'filtered by containing "{val}" in {key} for {len(self.papers)}, remaining {len(filtered)}')
+        return PaperList(filtered)
+
+    def items(self):
+        return self.papers
+
+    def __iter__(self):
+        for paper in self.papers:
+            yield paper
+
+    def __call__(self, *args, **kwargs):
+        return self.papers
+
     def __repr__(self):
         repr_content = f'\n'
         for one in self.papers:
             repr_content += str(one)
         return repr_content
+
+    def __len__(self):
+        return len(self.papers)
