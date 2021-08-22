@@ -45,12 +45,19 @@ class Cache(object):
 
 
 class LocalCache(Cache):
+    def __init__(self, name, logger=None):
+        super(LocalCache, self).__init__(name, logger)
+        self.local_path = ''
+
     def store(self, local_dir='./cache'):
         if not os.path.exists(local_dir):
             os.makedirs(local_dir, exist_ok=True)
             self._logger.warning(f'{local_dir} did not exist, and has been created now.')
-        with open(f'{os.path.join(local_dir, self._name)}.pkl', 'wb') as fw:  # Pickling
+        local_path = f'{os.path.join(local_dir, self._name)}.pkl'
+        with open(local_path, 'wb') as fw:  # Pickling
             pickle.dump(self._cache, fw, protocol=pickle.HIGHEST_PROTOCOL)
+
+        self.local_path = local_path
 
     def load(self, local_path=''):
         if not local_path:
@@ -58,6 +65,8 @@ class LocalCache(Cache):
         with open(local_path, 'rb') as fr:
             cache = pickle.load(fr)
         self._cache = cache
+
+        self.local_path = local_path
 
     def smart_load(self, local_path=''):
         """
@@ -72,6 +81,18 @@ class LocalCache(Cache):
                 cache = pickle.load(fr)
                 self._cache = cache
 
+        self.local_path = local_path
+
+    def clear(self):
+        """
+        :return:
+        clear both cathe in memory and local.
+        """
+        self._cache = dict()
+        if self.local_path:
+            os.remove(self.local_path)
+            self.local_path = ''
+
     @classmethod
     def load_from(cls, local_path):
         if os.path.exists(local_path):
@@ -79,5 +100,6 @@ class LocalCache(Cache):
         cache_name = os.path.basename(local_path).split('.')[0]
         new = LocalCache(cache_name)
         new.load(local_path)
+        new.local_path = local_path  # record this local_path, it is useful when make clear.
         return new
 

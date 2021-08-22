@@ -1,7 +1,7 @@
 """
 @Desc:
 """
-
+from tqdm import tqdm
 from bs4 import BeautifulSoup as Soup
 from .logger import MyLogger
 from src.common.string_tools import String
@@ -43,8 +43,12 @@ class PaperList(object):
         _paper_list = PaperList([], logger)
         page = Soup(r_content, "html.parser")
         # segment of papers
-        papers = page.find("div", {"id": conf_content})
-        for one in papers.find_all("p", {"class": "d-sm-flex align-items-stretch"}):
+        core = page.find("div", {"id": conf_content})
+
+        # get info from infobox ===========
+        # the first is not a paper.
+        infobox_set = core.find_all("p", {"class": "d-sm-flex align-items-stretch"})[1:]
+        for one in tqdm(infobox_set, desc='parsing infobox_set'):
             infobox = one.find_all("span", {"class", "d-block"})[1]
             title_with_href= infobox.find("a", {"class": "align-middle"})
             title = title_with_href.get_text().strip()
@@ -55,6 +59,15 @@ class PaperList(object):
             for author in infobox.find_all("a"):
                 authors.append(author.get_text().strip())
             _paper_list.papers.append(Paper(title, year, url, authors))
+
+        # get info from abstract ===========
+        abstract_set = core.find_all("div", {"class", "card-body p-3 small"})
+        if len(abstract_set) != len(_paper_list):
+            raise ValueError
+        for one, paper in tqdm(zip(abstract_set,_paper_list ), desc='parsing abstract_set'):
+            abstract = one.get_text().strip()
+            paper.abstract = abstract
+
         return _paper_list
 
     def add_logger(self, logger: MyLogger):
