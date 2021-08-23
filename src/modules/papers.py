@@ -4,7 +4,7 @@
 from tqdm import tqdm
 from bs4 import BeautifulSoup as Soup
 from .logger import MyLogger
-from src.common.string_tools import String
+from src.common.string_tools import StringTools
 
 
 class Paper(object):
@@ -76,7 +76,7 @@ class PaperList(object):
     def filter(self, key: str, val: str):
         filtered = []
         for paper in self.papers:
-            if String.contain(eval(f'paper.{key}'), val):
+            if StringTools.contain(eval(f'paper.{key}'), val):
                 paper.add_desc(f'filtered by containing "{val}" in {key}')
                 filtered.append(paper)
         if isinstance(self.logger, MyLogger):

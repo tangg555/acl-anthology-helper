@@ -1,4 +1,4 @@
-class String(object):
+class StringTools(object):
     @classmethod
     def match(cls, one: str, two: str):
         return one.lower() == two.lower()

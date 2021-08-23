@@ -14,7 +14,7 @@ from multiprocessing import Pool
 from tqdm import tqdm
 from src.modules.logger import MyLogger
 from src.modules.papers import Paper, PaperList
-from src.common.string_tools import String
+from src.common.string_tools import StringTools
 
 class ParallelDownloader(object):
     def set_downlard_dir(self, path):
