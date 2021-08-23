@@ -8,5 +8,23 @@ class String(object):
         return obj.lower() in subj.lower()
 
     @classmethod
-    def fileNameNorm(cls, obj):
-        return ''.join(filter(str.isalnum, obj))
+    def isssymbols(cls, c: chr):
+        """
+        :param c: character
+        :return:
+        is special symbols like !@#$%^%......
+        """
+        return str.isalnum(c) | str.isspace(c)
+
+    @classmethod
+    def _is_valid_for_file(cls, c: chr):
+        """
+        :param c: character
+        :return:
+        is special symbols like !@#$%^%......
+        """
+        return False if c in "\\/:*?*<>|" else True
+
+    @classmethod
+    def fileNameNorm(cls, string: str):
+        return ''.join(filter(cls._is_valid_for_file, string))

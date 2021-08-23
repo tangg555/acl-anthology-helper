@@ -3,3 +3,5 @@ log
 download
 toy
 cache
+*.pyc
+__pycache__
