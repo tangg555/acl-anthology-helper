@@ -2,13 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-To help search, filter, and download papers from 'acl anthology' (https://aclanthology.org/).
-
-**Search and filter like:** <br>![](/images/首页1.png)
-
-**Get Papers:** <br>![](/images/首页1.png)
-
-**Download them:** <br>![](/images/首页1.png)
+To help search, filter, and download papers from 'acl anthology' ([https://aclanthology.org/](https://aclanthology.org/)).
 
 ## Main Features
 - Retrieve papers by input conference, content, and year.
@@ -34,3 +28,14 @@ That's it.
 ## Note
 
 I develop this project by Python 3.6, and it doesn't support python 2.
+
+**homepage**
+
+![](/images/aclanthology.png)
+
+There are many conferences and contents belonging to them. 
+
+Choose one, and we can see papers' list.
+
+![](/images/paper_list.png)
+
