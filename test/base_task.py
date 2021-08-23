@@ -1,7 +1,7 @@
 """
 @Desc:
 """
-
+import os
 from src.modules import Retriever
 from src.modules.constants import ConfConsts
 from src.modules.downloader import PaperDownloader
@@ -14,5 +14,5 @@ class BaseTask(object):
         downloader = PaperDownloader()
 
         papers = acl.papers
-        filtered = papers.filter('title', 'commonsense')
-        downloader.multi_download(filtered, acl.conf_content)
+        filtered = papers.filter('title', 'commonsense') | papers.filter('abstract', 'commonsense')
+        downloader.multi_download(filtered, os.path.join(acl.conf_content, 'commonsense_title_or_abstract'))

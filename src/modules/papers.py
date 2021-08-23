@@ -86,6 +86,14 @@ class PaperList(object):
     def items(self):
         return self.papers
 
+    def __and__(self, other):
+        new = PaperList(papers=list(set(self.papers) & set(other.papers)), logger=self.logger)
+        return new
+
+    def __or__(self, other):
+        new = PaperList(papers=list(set(self.papers) | set(other.papers)), logger=self.logger)
+        return new
+
     def __iter__(self):
         for paper in self.papers:
             yield paper
