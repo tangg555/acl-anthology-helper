@@ -1,0 +1,4 @@
+tqdm==4.62.1
+wget==3.2
+requests==2.23.0
+beautifulsoup4==4.9.3
