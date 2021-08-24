@@ -13,6 +13,7 @@ from src.modules.papers import Paper, PaperList
 from src.common.string_tools import StringTools
 from src.common.file_tools import FileTools
 
+
 class Downloader(object):
     def __init__(self, download_dir='./download', logger=None):
         self._download_dir = download_dir
@@ -34,8 +35,8 @@ class PaperDownloader(Downloader):
             raise FileExistsError(f'The input directory -{download_dir}- is invalid.')
         self._download_dir = download_dir
 
-    def download(self, paper: Paper, prefix_path, with_info=False):
-        prefix = os.path.join(self._download_dir, prefix_path)
+    def download(self, paper: Paper, prefix_dir, with_info=False):
+        prefix = os.path.join(self._download_dir, prefix_dir)
         if not os.path.exists(prefix):
             os.makedirs(prefix)
         fpath = os.path.join(prefix, f'{StringTools.fileNameNorm(paper.title)}.pdf')
@@ -45,7 +46,7 @@ class PaperDownloader(Downloader):
         if with_info:
             self._logger.info(f'paper downloaded at {fpath}')
 
-    def multi_download(self, papers: PaperList, prefix_path, with_info=False):
+    def multi_download(self, papers: PaperList, prefix_dir, with_info=False):
         """
         :param papers:
         :param prefix_path:
@@ -58,13 +59,13 @@ class PaperDownloader(Downloader):
         fails = []
         for paper in tqdm(papers, desc=f"multi downloading", total=papers.size):
             try:
-                self.download(paper, prefix_path)
+                self.download(paper, prefix_dir)
                 success += 1
             except Exception as e:
                 self._logger.warning(f'{paper} download failed, the exception is :{e}')
                 fails.append(paper)
         self._logger.info('All subprocesses done.')
-        prefix = os.path.join(self._download_dir, prefix_path)
+        prefix = os.path.join(self._download_dir, prefix_dir)
         FileTools.info_to_file(papers, os.path.join(prefix, 'papers_info.txt'))
         FileTools.info_to_file(f'{success} downloaded, total: {papers.size}\nfailed papers:\n{fails}',
                                os.path.join(prefix, 'download_info.txt'))
