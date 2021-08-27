@@ -22,10 +22,10 @@ class Downloader(object):
     def set_downlard_dir(self, path):
         pass
 
-    def download(self, obj, prefix_dir, with_info=False):
+    def download(self, obj, prefix_dir, verbose=False):
         pass
 
-    def multi_download(self, objs, prefix_dir, with_info=False):
+    def multi_download(self, objs, prefix_dir, verbose=False):
         pass
 
 
@@ -35,7 +35,7 @@ class PaperDownloader(Downloader):
             raise FileExistsError(f'The input directory -{download_dir}- is invalid.')
         self._download_dir = download_dir
 
-    def download(self, paper: Paper, prefix_dir, with_info=False):
+    def download(self, paper: Paper, prefix_dir, verbose=False):
         prefix = os.path.join(self._download_dir, prefix_dir)
         if not os.path.exists(prefix):
             os.makedirs(prefix)
@@ -43,14 +43,14 @@ class PaperDownloader(Downloader):
         r = requests.get(paper.url)
         with open(fpath, "wb") as f:
             f.write(r.content)
-        if with_info:
+        if verbose:
             self._logger.info(f'paper downloaded at {fpath}')
 
-    def multi_download(self, papers: PaperList, prefix_dir, with_info=False):
+    def multi_download(self, papers: PaperList, prefix_dir, verbose=False):
         """
         :param papers:
         :param prefix_path:
-        :param with_info:
+        :param verbose:
         :return:
         without multiprocessing.
         """
