@@ -3,14 +3,14 @@
 """
 import os
 from src.modules import Retriever
-from src.modules.constants import ConfConsts
+from src.modules.constants import ACLConsts
 from src.modules.downloader import PaperDownloader
 
 
 class BaseTask(object):
     @classmethod
     def run(cls):
-        acl = Retriever.acl(2021, ConfConsts.LONG, True)    # use local cache
+        acl = Retriever.acl(2021, ACLConsts.LONG, True)    # use local cache
         downloader = PaperDownloader()
 
         papers = acl.papers

@@ -4,5 +4,8 @@
 
 CACHE_DIR = './cache'
 
-class ConfConsts(object):
+class ACLConsts(object):
     LONG = "2021-acl-long"
+
+class NAACLConsts(object):
+    MAIN = "2021-naacl-main"

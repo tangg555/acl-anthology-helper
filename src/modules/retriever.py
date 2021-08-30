@@ -29,11 +29,7 @@ class Retriever(object):
         self._collect_stats()
 
     @classmethod
-    def acl(cls, year, content, cache_enable=True):
-        return cls._make_conference("acl", year, content, cache_enable)
-
-    @classmethod
-    def _make_conference(cls, conference, year, conf_content, cache_enable=True):
+    def make_conference(cls, conference, year, conf_content, cache_enable=True):
         url = f"https://aclanthology.org/events/{conference}-{year}/#{conf_content}"
         return Retriever(url, conference, year, conf_content, cache_enable)
 
@@ -56,6 +52,14 @@ class Retriever(object):
     def _collect_stats(self):
         stats.add(Stat(f'{self.conf_content}').add_attr('papers', len(self.papers)))
         self.logger.info(stats.repr())
+
+    @classmethod
+    def acl(cls, year, content, cache_enable=True):
+        return cls.make_conference("acl", year, content, cache_enable)
+
+    @classmethod
+    def naacl(cls, year, content, cache_enable=True):
+        return cls.make_conference("naacl", year, content, cache_enable)
 
     def __repr__(self):
         repr_content = f"========== {self._class_name}: ============\n"
