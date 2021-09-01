@@ -1,0 +1,50 @@
+{% extends 'homepage_base.html' %}
+{% block title %}acl-anthology文献数据挖掘系统{% endblock %}
+{# 中部展示位置 #}
+{% block pageMiddle %}
+<section>
+	<div class="wp list personal_list comp">
+		<div id="list-group" class="left">
+			<ul>
+				<li><a href="#distribute">论文发表机构国家分布</a></li>
+                <li><a href="#allsession">AAAI会议论文统览</a></li>
+                <li><a href="#acceptRate">AAAI会议中稿率</a></li>
+                <li><a href="#author">AAAI作者统计</a></li>
+                <li><a href="#wordcloud">AAAI词云图</a></li>
+                <li><a href="#aff">AAAI机构统计</a></li>
+                <li><a href="#au_relationship">AAAI作者关系图谱</a></li>
+                <li><a href="#LDA_topic_model">AAAI会议论文主题聚类</a></li>
+			</ul>
+		</div>
+        {% block right_form %}
+        <div class="right companycenter layout grouping" >
+            <div class="head">
+                <h1>AAAI</h1>
+            </div>
+            <div class="brief group_list">
+                    {#1.国家分布图#}
+                    <div class="module1_5 box">
+                        <div class="bottom">
+                            <span class="fl"><h2 id="distribute">论文发表机构国家分布</h2></span>
+                        </div>
+                    </div>
+                    {#2.AAAI会议论文统览#}
+                    <div class="module1_5 box">
+                        <div class="bottom">
+                            <span class="fl"><h2 id="allsession">历年AAAI会议论文统览</h2></span>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="right companycenter layout" >
+            <div class="head">
+                <h1>系统介绍</h1>
+            </div>
+            <div class="cont">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                本系统通过对AAAI历年会议论文的数据挖掘和分析，运用异步爬虫获取数据、数据清洗、大数据统计和分析等方法，结合文献标题、机构、作者和所属国家等相关指标进行聚类和去重，综合分析出相关科技前沿领域的专家、机构等的学术影响力，作为寻找研究前沿和建立国内外各领域专家库的基础评判标准，为国内外学院、机构、政府的项目支撑、人才选拔、专家评定、项目审批、技术发展方向的确定、国家科技决策支持工作带来了科学、客观、公正的重要支撑。
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+</section>
+{% endblock %}
