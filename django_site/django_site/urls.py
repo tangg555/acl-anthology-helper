@@ -16,8 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView, LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # TemplateView.as_view会将template转换为view
     path('', TemplateView.as_view(template_name='homepage.html'), name='homepage'),
+    # path('login/', LoginView.as_view(), name='users.login'),
+    # path('logout/', LogoutView.as_view(), name='users.logout'),
+    # path('register/', RegisterView.as_view(), name='users.register'),
+    # path('captcha/', include('captcha.urls')),
+    # # users' profiles
+    # path('users/', include('apps.users.urls', namespace='users')),
 ]
+

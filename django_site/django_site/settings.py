@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'captcha',  # 图片验证码
     'papers',
     'users',
     'anthology'
@@ -118,6 +119,13 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# 发送邮件的setting设置
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_POST = '25'
+EMAIL_HOST_USER = 'test_paper_dm@163.com'
+EMAIL_HOST_PASSWORD = 'admin123' # 这里不是邮箱登录密码，而是授权码
+EMAIL_FROM = 'test_paper_dm@163.com'
 
 # Media files, including images, audios and so on.
 MEDIA_URL = '/media/'

@@ -3,3 +3,5 @@ wget==3.2
 requests==2.23.0
 beautifulsoup4==4.9.3
 Django~=3.2.6
+captcha~=0.3
+django-simple-captcha~=0.5.14
