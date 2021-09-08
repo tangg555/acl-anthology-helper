@@ -42,8 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'captcha',  # 图片验证码
     'papers',
-    'users',
-    'anthology'
+    'users'
 ]
 
 AUTH_USER_MODEL = "users.UserProfile"
