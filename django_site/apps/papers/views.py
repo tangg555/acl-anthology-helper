@@ -10,3 +10,9 @@ class LocalPapersView(View):
     def get(self, request):
         return render(request, 'apps/papers/local-papers.html', {})
 
+class DownloadPapersView(View):
+    """
+    list conferences that can be downloaded
+    """
+    def get(self, request):
+        return render(request, 'apps/papers/download-papers.html', {})
