@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from django.views.generic.base import View
 
 # Create your views here.
@@ -16,3 +16,11 @@ class DownloadPapersView(View):
     """
     def get(self, request):
         return render(request, 'apps/papers/download-papers.html', {})
+
+class DownloadAjaxView(View):
+    """
+
+    """
+    def get(self, request):
+        # return render(request, 'apps/papers/download-papers.html', {})
+        return HttpResponse('ajax success!')

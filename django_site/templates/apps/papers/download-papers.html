@@ -19,9 +19,10 @@
 
     <!-- Main content -->
     <section class="content">
-        <div class="container-fluid">
-            <!-- dowload papers -->
+        <div class="container-default">
+            <!-- download papers -->
             <div class="card card-primary card-outline">
+                <!-- card head -->
                 <a class="d-block w-100" data-toggle="collapse" href="#collapseOne">
                     <div class="card-header">
                         <h4 class="card-title w-100">
@@ -29,9 +30,40 @@
                         </h4>
                     </div>
                 </a>
-                <div id="collapseOne" class="collapse show" data-parent="#accordion">
-                    <div class="card-body">
+                <!-- card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>Conference</label>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" placeholder="acl">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>Year</label>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" placeholder="2021">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>Content</label>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" placeholder="long">
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <!-- card footer -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary" id="conference-info">Download</button>
+                </div>
+                <div id="papers-data">
                 </div>
             </div>
 
@@ -57,11 +89,23 @@
 
 <!-- REQUIRED SCRIPTS -->
 <!-- jQuery -->
-<!-- 按下download-papers按钮后会高亮 -->
 <script src="{% static 'AdminLTE-3.1.0/plugins/jquery/jquery.min.js' %}"></script>
+<!-- 按下download-papers按钮后会高亮 -->
 <script>
 $(function(){
     $('#download-papers').addClass('active');
 });
+</script>
+<!-- ajax实现download -->
+<script>
+$('#conference-info').click(function(){
+  $.ajax({
+    url:'/papers/download-papers/download/',
+    type:'get',
+    success:function(data){
+      $('#papers-data').html(data)
+    }
+  })
+})
 </script>
 {% endblock %}
