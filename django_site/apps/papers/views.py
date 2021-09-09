@@ -25,5 +25,6 @@ class DownloadAjaxView(View):
         return HttpResponse('ajax get succeed!')
 
     def post(self, request):
-        print('post')
-        return HttpResponse(f'ajax post succeed! content: {request.body}')
+        data = request.POST
+        info = data.get('conference-info')
+        return HttpResponse(f'ajax post succeed! content: {info}')

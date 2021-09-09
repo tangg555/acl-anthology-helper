@@ -30,52 +30,49 @@
                         </h4>
                     </div>
                 </a>
-                <!-- form -->
-                <form>
-                    <!-- card body -->
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label>Conference</label>
-                                    <div class="col-6">
-                                        <input type="text" id="conference-input" class="form-control" placeholder="acl">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label>Year</label>
-                                    <div class="col-6">
-                                        <input type="text" id="year-input" class="form-control" placeholder="2021">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label>Content</label>
-                                    <div class="col-6">
-                                        <input type="text" id="content-input" class="form-control" placeholder="long">
-                                    </div>
+                <!-- card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>Conference</label>
+                                <div class="col-6">
+                                    <input type="text" id="conference-input" class="form-control" placeholder="acl">
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <p id="conference-link" class="text-secondary">None</p>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>Year</label>
+                                <div class="col-6">
+                                    <input type="text" id="year-input" class="form-control" placeholder="2021">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>Content</label>
+                                <div class="col-6">
+                                    <input type="text" id="content-input" class="form-control" placeholder="long">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    {% csrf_token %}
-                    <!-- card footer -->
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <button type="submit" id="conference-info-submit" class="btn btn-primary">Download</button>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p id="conference-info-display" class="text-secondary">None</p>
                         </div>
                     </div>
-                </form>
+                </div>
+                <!-- card footer -->
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <button type="submit" id="conference-info-submit" class="btn btn-primary">Download</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- result -->
                 <div class="card-body">
                     <div class="row">
@@ -116,42 +113,43 @@
 $(function(){
     $('#download-papers').addClass('active');
 });
-
 </script>
 
 <!-- 实时组成conference-link -->
 <script>
-function getConfLink() {
+function getConfInfo() {
     var conference = $('#conference-input').val();
     var year = $('#year-input').val();
     var content = $('#content-input').val();
-    var link = `${conference}-${year}-${content}`;
-    return link;
+    var info = `${conference}-${year}-${content}`;
+    return info;
 }
 
 $('input').keyup(function () {
-    $('#conference-link').html(getConfLink());
+    $('#conference-info-display').html(getConfLink());
 });
-
 </script>
 
 <!-- ajax实现download -->
 <script>
 $('#conference-info-submit').click(function(){
-  alert("send")
-  $.ajax({
+    var post_data = {
+        'conference-info': getConfInfo(),
+        'csrfmiddlewaretoken': "{{ csrf_token }}"
+    }
+
+    $.ajax({
     url: '/papers/download-papers/download/',
-    type: 'GET',
-<!--    data: {query: "hello"},-->
+    type: 'POST',
+    data: post_data,
     success: function(data){
       $('#papers-data').html(data)
-    }
+    },
     error: function(data){
       $('#papers-data').html("post failed")
     }
-  })
+    })
 });
-
 </script>
 
 {% endblock %}
