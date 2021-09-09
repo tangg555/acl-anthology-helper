@@ -22,5 +22,8 @@ class DownloadAjaxView(View):
 
     """
     def get(self, request):
-        # return render(request, 'apps/papers/download-papers.html', {})
-        return HttpResponse('ajax success!')
+        return HttpResponse('ajax get succeed!')
+
+    def post(self, request):
+        print('post')
+        return HttpResponse(f'ajax post succeed! content: {request.body}')
