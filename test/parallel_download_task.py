@@ -10,7 +10,8 @@ from src.modules.parallel_downloader import PaperDownloader
 class ParallelDownloadTask(object):
     @classmethod
     def run(cls):
-        acl = Retriever.acl(2021, ConfConsts.LONG, True)    # use local cache
+        acl = Retriever.acl(2021, ConfConsts.LONG, True)
+        # acl = Retriever.acl(2021, ConfConsts.LONG, True)    # use local cache
         downloader = PaperDownloader()
 
         papers = acl.papers

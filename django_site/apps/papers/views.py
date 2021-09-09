@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from django.views.generic.base import View
-
-# Create your views here.
+from django.http import JsonResponse
+from .data_process import load_papers_to_db
 
 class LocalPapersView(View):
     """
@@ -26,5 +26,15 @@ class DownloadAjaxView(View):
 
     def post(self, request):
         data = request.POST
-        info = data.get('conference-info')
-        return HttpResponse(f'ajax post succeed! content: {info}')
+        query_set = load_papers_to_db(data['conference'], data['year'], data['content'])
+        papers = []
+        for one in query_set:
+            papers.append({
+                'conf': one.conf,
+                'year': one.year,
+                'conf_content': one.conf_content,
+                'title': one.title,
+                'authors': one.authors
+            })
+
+        return JsonResponse(papers, safe=False)

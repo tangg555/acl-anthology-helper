@@ -4,7 +4,9 @@ from django.core.validators import MaxValueValidator
 
 class Paper(models.Model):
     title = models.CharField(max_length=50, verbose_name='title', default='')
+    conf = models.CharField(max_length=50, verbose_name='conf', default='')
     year = models.IntegerField(validators=[MaxValueValidator(4)], verbose_name='year', default='')
+    conf_content = models.CharField(max_length=50, verbose_name='conf_content', default='')
     # 字符串，地址正则表达式   用于保存URL。若 verify_exists 参数为 True (默认)， 给定的 URL 会预先检查是否存在(即URL是否被有效装入且没有返回404响应).
     url = models.URLField(max_length=200, verbose_name='url', default='')
     authors = models.CharField(max_length=200, verbose_name='authors', default='')

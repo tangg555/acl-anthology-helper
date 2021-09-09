@@ -37,7 +37,7 @@
                             <div class="form-group">
                                 <label>Conference</label>
                                 <div class="col-6">
-                                    <input type="text" id="conference-input" class="form-control" placeholder="acl">
+                                    <input type="text" id="conference-input" class="form-control" value="acl">
                                 </div>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                             <div class="form-group">
                                 <label>Year</label>
                                 <div class="col-6">
-                                    <input type="text" id="year-input" class="form-control" placeholder="2021">
+                                    <input type="text" id="year-input" class="form-control" value="2021">
                                 </div>
                             </div>
                         </div>
@@ -53,14 +53,14 @@
                             <div class="form-group">
                                 <label>Content</label>
                                 <div class="col-6">
-                                    <input type="text" id="content-input" class="form-control" placeholder="long">
+                                    <input type="text" id="content-input" class="form-control" value="2021-acl-long">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
-                            <p id="conference-info-display" class="text-secondary">None</p>
+                        <div id="conference-info-display" class="col-md-6">
+                            <p class="text-secondary">None</p>
                         </div>
                     </div>
                 </div>
@@ -74,14 +74,9 @@
                 </div>
 
                 <!-- result -->
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <p id="papers-data" class="text-secondary">Result: None</p>
-                        </div>
-                    </div>
+                <div id="papers-data" class="card-body table-responsive p-0" style="height: 300px;">
+                    <p class="text-secondary" style="margin-left:20px;">Result: None</p>
                 </div>
-
             </div>
 
             <!-- acl anthology -->
@@ -121,12 +116,23 @@ function getConfInfo() {
     var conference = $('#conference-input').val();
     var year = $('#year-input').val();
     var content = $('#content-input').val();
-    var info = `${conference}-${year}-${content}`;
+    info = `https://aclanthology.org/events/${conference}-${year}/#`;
+    info += content
     return info;
 }
 
+$(function(){
+    var confInfo = getConfInfo();
+    $('#conference-info-display').html(`
+    <a href="${confInfo}"><p class="text-secondary">${confInfo}</p></a>
+    `)
+});
+
 $('input').keyup(function () {
-    $('#conference-info-display').html(getConfLink());
+    var confInfo = getConfInfo();
+    $('#conference-info-display').html(`
+    <a href="${confInfo}"><p class="text-secondary">${confInfo}</p></a>
+    `)
 });
 </script>
 
@@ -134,16 +140,51 @@ $('input').keyup(function () {
 <script>
 $('#conference-info-submit').click(function(){
     var post_data = {
-        'conference-info': getConfInfo(),
+        'conference': $('#conference-input').val(),
+        'year': $('#year-input').val(),
+        'content': $('#content-input').val(),
         'csrfmiddlewaretoken': "{{ csrf_token }}"
     }
 
+    var post_result_template = `
+    <h4>Results up to 10:</h4>
+    <table class="table table-head-fixed text-norap">
+        <thead>
+            <tr>
+                <th>index</th>
+                <th>Conference</th>
+                <th>Title</th>
+                <th>Authors</th>
+            </tr>
+        </thead>
+        <tbody id="paper-list">
+        </tbody>
+    </table>
+    `
+    var LIST_MAX_LEN = 10
+
+    $('#papers-data').html("Running......")
     $.ajax({
     url: '/papers/download-papers/download/',
     type: 'POST',
     data: post_data,
     success: function(data){
-      $('#papers-data').html(data)
+        $('#papers-data').html(post_result_template)
+        for (var i = 0; i < data.length; i++) {
+            if (i == LIST_MAX_LEN) {
+                break
+            }
+            var paper = data[i]
+            var content = `
+                <tr>
+                    <td>${i}</td>
+                    <td>${paper.conf}-${paper.year}-${paper.conf_content}</td>
+                    <td>${paper.title}</td>
+                    <td>${paper.authors}</td>
+                </tr>
+            `
+            $('#paper-list').append(content)
+        }
     },
     error: function(data){
       $('#papers-data').html("post failed")
@@ -151,5 +192,4 @@ $('#conference-info-submit').click(function(){
     })
 });
 </script>
-
 {% endblock %}
