@@ -11,8 +11,9 @@ from logging import DEBUG
 from src.modules.logger import MyLogger
 
 class Cache(object):
-    def __init__(self, name, logger=None):
+    def __init__(self, name, local_dir='./cache', logger=None):
         self._name = name
+        self._local_dir = local_dir
         self._logger = logger if logger else MyLogger('cache', DEBUG)
         self._cache = dict()
 
@@ -45,15 +46,16 @@ class Cache(object):
 
 
 class LocalCache(Cache):
-    def __init__(self, name, logger=None):
-        super(LocalCache, self).__init__(name, logger)
+    def __init__(self, name, local_dir='./cache', logger=None):
+        super(LocalCache, self).__init__(name, local_dir, logger)
         self.local_path = ''
 
-    def store(self, local_dir='./cache'):
-        if not os.path.exists(local_dir):
-            os.makedirs(local_dir, exist_ok=True)
-            self._logger.warning(f'{local_dir} did not exist, and has been created now.')
-        local_path = f'{os.path.join(local_dir, self._name)}.pkl'
+    def store(self, local_path=''):
+        if not local_path:
+            if not os.path.exists(self._local_dir):
+                os.makedirs(self._local_dir, exist_ok=True)
+                self._logger.warning(f'{self._local_dir} did not exist, and has been created now.')
+            local_path = f'{os.path.join(self._local_dir, self._name)}.pkl'
         with open(local_path, 'wb') as fw:  # Pickling
             pickle.dump(self._cache, fw, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -61,12 +63,10 @@ class LocalCache(Cache):
 
     def load(self, local_path=''):
         if not local_path:
-            local_path = f'./cache/{self._name}.pkl'
+            local_path = f'{os.path.join(self._local_dir, self._name)}.pkl'
         with open(local_path, 'rb') as fr:
-            cache = pickle.load(fr)
-        self._cache = cache
-
-        self.local_path = local_path
+            self._cache = pickle.load(fr)
+            self.local_path = local_path
 
     def smart_load(self, local_path=''):
         """
@@ -75,13 +75,15 @@ class LocalCache(Cache):
         Don't raise an error if cache does not exis.
         """
         if not local_path:
-            local_path = f'./cache/{self._name}.pkl'
+            local_path = f'{os.path.join(self._local_dir, self._name)}.pkl'
         if os.path.exists(local_path):
             with open(local_path, 'rb') as fr:
                 cache = pickle.load(fr)
                 self._cache = cache
+                self.local_path = local_path
+        else:
+            self._logger.warning(f'load failed. "{local_path} does not exist."')
 
-        self.local_path = local_path
 
     def clear(self):
         """

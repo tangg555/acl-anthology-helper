@@ -10,6 +10,7 @@ import os
 from logging import Logger
 from logging import NOTSET
 
+
 class MyLogger(Logger):
     def __init__(self, name, level=NOTSET, log_path=''):
         super(MyLogger, self).__init__(name, level)
@@ -28,7 +29,7 @@ class MyLogger(Logger):
         if not os.path.exists(self.log_path):
             os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
             warns = f'{self.log_path} did not exist, and has been created now.'
-        fh = logging.FileHandler(f'{self.log_path}')
+        fh = logging.FileHandler(f'{self.log_path}', encoding='utf-8')
         fh.setLevel(self.level)
         fh.setFormatter(formatter)
 
@@ -44,15 +45,4 @@ class MyLogger(Logger):
         # output warning
         if warns:
             self.warning(warns)
-        self.info(f'MyLogger instance {self.name} has been set. level: {self.level}, log_path: {self.log_path}')
-
-
-
-
-
-
-
-
-
-
-
+        self.info(f'MyLogger instance {self.name} has been set. level: {self.level}, log_path: {os.path.abspath(self.log_path)}')

@@ -16,6 +16,7 @@ from src.common.string_tools import StringTools
 from src.common.file_tools import FileTools
 from multiprocessing import Pool
 
+
 class PaperDownloader(object):
     def __init__(self, download_dir='./download', logger=None):
         self._download_dir = download_dir
@@ -30,8 +31,7 @@ class PaperDownloader(object):
     def download(paper: Paper, download_dir, prefix_path):
         try:
             prefix = os.path.join(download_dir, prefix_path)
-            if not os.path.exists(prefix):
-                os.makedirs(prefix)
+            os.makedirs(prefix, exist_ok=True)
             fpath = os.path.join(prefix, f'{StringTools.fileNameNorm(paper.title)}.pdf')
             r = requests.get(paper.url)
             with open(fpath, "wb") as f:
@@ -41,13 +41,16 @@ class PaperDownloader(object):
 
     def multi_download(self, papers: PaperList, prefix_dir):
         cpu_cores = os.cpu_count()  # number of parallel
-        self._logger.info(f'Papers multi_download(parallel) starts, cpus:{cpu_cores} papers: {papers.size}')
+        download_dir = self._download_dir
+        self._logger.info(
+            f'Papers multi_download(parallel) starts, cpus: {cpu_cores},'
+            f' download_dir: {os.path.abspath(download_dir)},'
+            f' papers: {papers.size}')
         params = []
         for paper in papers.items():
-            params.append((paper, self._download_dir, prefix_dir))
+            params.append((paper, download_dir, prefix_dir))
         with Pool(cpu_cores) as process:
             process.starmap(self.download, params)
         self._logger.info('All subprocesses done.')
         prefix = os.path.join(self._download_dir, prefix_dir)
         FileTools.info_to_file(papers, os.path.join(prefix, 'papers_info.txt'))
-
