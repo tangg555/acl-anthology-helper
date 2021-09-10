@@ -5,6 +5,7 @@
 import requests
 from logging import DEBUG
 from src.modules.constants import CACHE_DIR
+from src.modules.conferences import Anthology
 from src.modules.papers import PaperList
 from src.modules.statistics import Statistics as stats
 from src.modules.statistics import Stat
@@ -14,8 +15,8 @@ from src.modules.cache import LocalCache
 class Retriever(object):
     _class_name = "ACL Anthology Retriever"
 
-    def __init__(self, cache_enable=True, cache_dir='./cache', log_path=''):
-        self.homepage_url = f"https://aclanthology.org/"
+    def __init__(self, cache_enable=True, cache_dir=CACHE_DIR, log_path=''):
+        self.homepage_url = "https://aclanthology.org/"
         self.logger = MyLogger('retriever', DEBUG, log_path)
         self.cache_enable = cache_enable
         if self.cache_enable:
@@ -27,9 +28,19 @@ class Retriever(object):
     def _get_conference_list(self):
         """
         :return:
-        note:  PaperList cannot be serialized, because of containing logging
+        note:  Anthology cannot be serialized, because of containing logging
         """
-        pass
+        _cache_key = 'anthology'
+        if self.cache and _cache_key in self.cache:
+            conf_list = self.cache[_cache_key]
+            anthology = Anthology(confs=conf_list, logger=self.logger)
+        else:
+            anthology = Anthology(confs=[], logger=self.logger)
+            anthology.parse_htmls()
+            if self.cache_enable:
+                self.cache[_cache_key] = anthology.confs
+                self.cache.store()
+        return anthology
 
     def _get_paper_list(self, conference, year, conf_content):
         """
@@ -40,7 +51,7 @@ class Retriever(object):
             paper_list = self.cache[conf_content]
             paper_list_obj = PaperList(papers=paper_list, logger=self.logger)
         else:
-            target_url = f"https://aclanthology.org/events/{conference}-{year}/#{conf_content}"
+            target_url = f"{self.homepage_url}/events/{conference}-{year}/#{conf_content}"
             response = requests.get(target_url)
             paper_list_obj = PaperList.init_from_response(conf_content, year, response.content, self.logger)
             if self.cache_enable:
