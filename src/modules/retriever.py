@@ -25,17 +25,17 @@ class Retriever(object):
         else:
             self.cache = None
 
-    def _get_conference_list(self):
+    def load_anthology(self):
         """
         :return:
         note:  Anthology cannot be serialized, because of containing logging
         """
         _cache_key = 'anthology'
         if self.cache and _cache_key in self.cache:
-            conf_list = self.cache[_cache_key]
-            anthology = Anthology(confs=conf_list, logger=self.logger)
+            conf_dict = self.cache[_cache_key]
+            anthology = Anthology(confs=conf_dict, logger=self.logger)
         else:
-            anthology = Anthology(confs=[], logger=self.logger)
+            anthology = Anthology(confs={}, logger=self.logger)
             anthology.parse_htmls()
             if self.cache_enable:
                 self.cache[_cache_key] = anthology.confs
