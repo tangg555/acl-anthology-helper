@@ -10,6 +10,7 @@ import json
 from logging import DEBUG
 from src.modules.logger import MyLogger
 
+
 class Cache(object):
     def __init__(self, name, local_dir='./cache', logger=None):
         self._name = name

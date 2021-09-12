@@ -16,7 +16,7 @@ class Retriever(object):
     _class_name = "ACL Anthology Retriever"
 
     def __init__(self, cache_enable=True, cache_dir=CACHE_DIR, log_path=''):
-        self.homepage_url = "https://aclanthology.org/"
+        self.homepage_url = "https://aclanthology.org"
         self.logger = MyLogger('retriever', DEBUG, log_path)
         self.cache_enable = cache_enable
         if self.cache_enable:

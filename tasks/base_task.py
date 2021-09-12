@@ -10,8 +10,7 @@ from src.modules.downloader import PaperDownloader
 class BaseTask(object):
     @classmethod
     def run(cls):
-        anthology = Retriever(cache_enable=False).load_anthology()  # use local cache
-        print(anthology)
+        anthology = Retriever(cache_enable=True).load_anthology()  # use local cache
         # downloader = PaperDownloader()
         #
         # filtered = papers.filter('title', 'commonsense') | papers.filter('abstract', 'commonsense')
