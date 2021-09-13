@@ -1,6 +1,7 @@
 """
-@Reference"
+@Reference:
 """
+
 import os
 import itertools
 import pymysql
@@ -75,7 +76,8 @@ class AnthologyMySQL(object):
                                 url char(100), 
                                 authors text, 
                                 abstract text,
-                                conf_content varchar(20));
+                                conf_content varchar(20),
+                                venue varchar(20));
                             ''')
         self.db_close_with_commit()
 
@@ -92,10 +94,11 @@ class AnthologyMySQL(object):
         authors_norm = ", ".join([one.replace("'", f"\\'") for one in paper.authors])
         abstract_norm = paper.abstract.replace("'", f"\\'")
         self.cursor.execute(f'''insert ignore into {DBConsts.PAPER_TABLE}
-                                (title, year, url, authors, abstract)
+                                (title, year, url, authors, abstract, conf_content, venue)
                                 values
                                 ('{title_norm}', {paper.year}, '{paper.url}', 
-                                '{authors_norm}', '{abstract_norm}');
+                                '{authors_norm}', '{abstract_norm}', '{paper.conf_content}', 
+                                '{paper.venue}');
                             ''')
 
     def load_data(self):
@@ -115,7 +118,8 @@ class AnthologyMySQL(object):
                     if self.cache and self.cache.get(conf_content.name, False):
                         continue
                     else:
-                        papers = self.retriever.get_paper_list_from_volumes(conf_content.name,
+                        papers = self.retriever.get_paper_list_from_volumes(conf_content.venue,
+                                                                            conf_content.name,
                                                                             conf_content.year,
                                                                             conf_content.link)
                         for paper in papers.items():
@@ -123,6 +127,7 @@ class AnthologyMySQL(object):
                             self.insert_a_paper(paper)
                     # 插入会议
                     self.insert_a_conf_content(conf_content)
+                    self.conn.commit()  # 提交数据
                     self.cache[conf_content.name] = True
                     self.cache.store()
                 self.cache[conf.name] = True

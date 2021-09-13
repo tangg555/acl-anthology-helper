@@ -6,5 +6,6 @@ cache
 database
 .db
 mysql_cfg.py
+database.py
 *.pyc
 __pycache__

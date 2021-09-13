@@ -1,20 +1,52 @@
 """
 @Desc:
+@Reference:
+https://github.com/lizhenggan/ABuilder
 """
-import os
-from src.modules import Retriever
-from src.modules.constants import ACLConsts
+
 from src.modules.downloader import PaperDownloader
-from src.modules.anthology_sqlite import AnthologySqlite
+from src.modules.papers import Paper, PaperList
 from src.modules.anthology_mysql import AnthologyMySQL
+from ABuilder.ABuilder import ABuilder
 
 class BaseTask(object):
     @classmethod
-    def run(cls):
+    def load_data_to_db(cls):
+        """
+        将论文数据载入数据库
+        """
         db = AnthologyMySQL(cache_enable=True)
         db.create_tables()
         db.load_data()  # 将数据爬取载入数据库中
-        print(db.get_conferences())
+
+    @classmethod
+    def query_papers(cls):
+        """
+        检索论文
+        """
+        conf_contents = ['ACL', 'EMNLP', 'TACL', 'NAACL']
+        years_limit = tuple(range(2016, 2022))
+        data = ABuilder().table('paper')\
+            .where({"year": ["in", years_limit]})\
+            .where({"venue": ["in", conf_contents]}).query()
+        print(data)
+        return data
+
+    @classmethod
+    def download_papers(cls, papers: PaperList):
+        """
+        检索论文
+        """
+        pass
+        # downloader = PaperDownloader()
+        #
+        # filtered = papers.filter('title', 'commonsense') | papers.filter('abstract', 'commonsense')
+        # downloader.multi_download(filtered, os.path.join(ACLConsts.LONG, 'commonsense_title_or_abstract'))
+
+    @classmethod
+    def run(cls):
+        cls.load_data_to_db()
+        cls.query_papers()
 
         # downloader = PaperDownloader()
         #

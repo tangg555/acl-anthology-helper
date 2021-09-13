@@ -9,13 +9,14 @@ from src.common.string_tools import StringTools
 
 
 class Paper(object):
-    def __init__(self, title, year, url, authors=[], abstrat="", conf_content=""):
+    def __init__(self, title, year, url, authors=[], abstrat="", conf_content="", venue=""):
         self.title = title
         self.year = year
         self.url = url
         self.authors = authors
         self.abstract = abstrat
         self.conf_content = conf_content
+        self.venue = venue
         self.reader_desc = ''  # I can add some descriptions to this paper
 
     def add_desc(self, desc: str):
@@ -41,7 +42,7 @@ class PaperList(object):
         return len(self.papers)
 
     @classmethod
-    def init_from_volumes_response(cls, conf_content, year, url, logger=None):
+    def init_from_volumes_response(cls, conf, conf_content, year, url, logger=None):
         """
         e.g. https://aclanthology.org/volumes/2021.acl-long/
         """
@@ -66,7 +67,7 @@ class PaperList(object):
                     skip_first = False
                     continue
                 authors.append(author.get_text().strip())
-            _paper_list.papers.append(Paper(title, year, url, authors, conf_content=conf_content))
+            _paper_list.papers.append(Paper(title, year, url, authors, conf_content=conf_content, venue=conf))
 
         # get info from abstract ===========
         abstract_set = page.find_all("div", {"class", "card-body p-3 small"})
@@ -78,7 +79,7 @@ class PaperList(object):
         return _paper_list
 
     @classmethod
-    def init_from_events_response(cls, conf_content, year, r_content, logger=None):
+    def init_from_events_response(cls, conf, conf_content, year, r_content, logger=None):
         """
         e.g. https://aclanthology.org/events/acl-2021/
         """
@@ -104,7 +105,7 @@ class PaperList(object):
                     skip_first = False
                     continue
                 authors.append(author.get_text().strip())
-            _paper_list.papers.append(Paper(title, year, url, authors, conf_content=conf_content))
+            _paper_list.papers.append(Paper(title, year, url, authors, conf_content=conf_content, venue=conf))
 
         # get info from abstract ===========
         abstract_set = core.find_all("div", {"class", "card-body p-3 small"})

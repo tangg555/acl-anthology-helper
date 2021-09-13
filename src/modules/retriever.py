@@ -12,6 +12,7 @@ from src.modules.statistics import Stat
 from src.modules.logger import MyLogger
 from src.modules.cache import LocalCache
 
+
 class Retriever(object):
     _class_name = "ACL Anthology Retriever"
 
@@ -42,10 +43,10 @@ class Retriever(object):
                 self.cache.store()
         return anthology
 
-    def get_paper_list_from_volumes(self, conf_content, year, url):
-        return PaperList.init_from_volumes_response(conf_content, year, url, self.logger)
+    def get_paper_list_from_volumes(self, conf, conf_content, year, url):
+        return PaperList.init_from_volumes_response(conf, conf_content, year, url, self.logger)
 
-    def _get_paper_list(self, conference, year, conf_content):
+    def _get_paper_list(self, conf, year, conf_content):
         """
         :return:
         note:  PaperList cannot be serialized, because of containing logging
@@ -54,9 +55,10 @@ class Retriever(object):
             paper_list = self.cache[conf_content]
             paper_list_obj = PaperList(papers=paper_list, logger=self.logger)
         else:
-            target_url = f"{self.homepage_url}/events/{conference}-{year}/#{conf_content}"
+            target_url = f"{self.homepage_url}/events/{conf}-{year}/#{conf_content}"
             response = requests.get(target_url)
-            paper_list_obj = PaperList.init_from_events_response(conf_content, year, response.content, self.logger)
+            paper_list_obj = PaperList.init_from_events_response(conf, conf_content, year, response.content,
+                                                                 self.logger)
             if self.cache_enable:
                 self.cache[conf_content] = paper_list_obj.papers
                 self.cache.store()
