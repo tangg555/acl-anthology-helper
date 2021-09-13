@@ -4,6 +4,8 @@
 
 CACHE_DIR = './cache'
 
+class DBConsts(object):
+    ANTHOLOGY_DB = 'anthology.db'
 
 class ConfConsts(object):
     ACL_EVENTS = "ACL Events"

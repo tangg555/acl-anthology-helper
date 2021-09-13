@@ -5,12 +5,16 @@ import os
 from src.modules import Retriever
 from src.modules.constants import ACLConsts
 from src.modules.downloader import PaperDownloader
-
+from src.modules.anthology_sqlite import AnthologySqlite
 
 class BaseTask(object):
     @classmethod
     def run(cls):
-        anthology = Retriever(cache_enable=True).load_anthology()  # use local cache
+        sqlite = AnthologySqlite()
+        sqlite.create_tables()
+        sqlite.sqlite_shell()
+
+
         # downloader = PaperDownloader()
         #
         # filtered = papers.filter('title', 'commonsense') | papers.filter('abstract', 'commonsense')

@@ -102,7 +102,7 @@ class Anthology(object):
         for row in tqdm(rows, desc='parsing non-acl events'):
             conf = row.find("th")
             conf_name = conf.get_text().strip()
-            conf_link = f'https://aclanthology.org/{conf.find("a").get("href")}'
+            conf_link = f'{self.homepage_url}{conf.find("a").get("href")}'
             self.confs[ConfConsts.NON_ACL_EVENTS].append(Conference(conf_name, ConfConsts.NON_ACL_EVENTS, conf_link))
 
     def fill_with_conf_contents(self):
@@ -118,10 +118,10 @@ class Anthology(object):
                     href = a.get("href")
                     name = href.split("/")[2]
                     full_name = a.get_text().strip()
-                    link = f'{self.homepage_url}/{href}'
+                    link = f'{self.homepage_url}{href}'
                     #   is blank for html.
                     volume_size = int(content.find("span").get_text().split(" ")[0].strip())
-                    conf.conf_contents[year].append(ConfContent(name, full_name, link, year, volume_size))
+                    conf.conf_contents[year].append(ConfContent(name, full_name, year, link, volume_size))
 
     def add_logger(self, logger: MyLogger):
         self.logger = logger

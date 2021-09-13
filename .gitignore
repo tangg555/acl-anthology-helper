@@ -3,5 +3,7 @@ log
 download
 toy
 cache
+database
+.db
 *.pyc
 __pycache__

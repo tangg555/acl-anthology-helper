@@ -42,6 +42,9 @@ class Retriever(object):
                 self.cache.store()
         return anthology
 
+    def get_paper_list_from_volumes(self, conf_content, year, url):
+        return PaperList.init_from_volumes_response(conf_content, year, url, self.logger)
+
     def _get_paper_list(self, conference, year, conf_content):
         """
         :return:
@@ -53,7 +56,7 @@ class Retriever(object):
         else:
             target_url = f"{self.homepage_url}/events/{conference}-{year}/#{conf_content}"
             response = requests.get(target_url)
-            paper_list_obj = PaperList.init_from_response(conf_content, year, response.content, self.logger)
+            paper_list_obj = PaperList.init_from_events_response(conf_content, year, response.content, self.logger)
             if self.cache_enable:
                 self.cache[conf_content] = paper_list_obj.papers
                 self.cache.store()
