@@ -82,6 +82,13 @@ class Retriever(object):
         retriever._collect_stats(conf_content, papers)
         return papers
 
+    @classmethod
+    def emnlp(cls, year, conf_content, cache_enable=True) -> PaperList:
+        retriever = Retriever(cache_enable=cache_enable)
+        papers = retriever._get_paper_list("emnlp", year, conf_content)
+        retriever._collect_stats(conf_content, papers)
+        return papers
+
     def __repr__(self):
         repr_content = f"========== {self._class_name}: ============\n"
         for attribute_name, attribute_value in self.__dict__.items():

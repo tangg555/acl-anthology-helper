@@ -7,5 +7,6 @@ database
 .db
 mysql_cfg.py
 database.py
+.DS_Store
 *.pyc
 __pycache__
