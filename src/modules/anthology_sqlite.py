@@ -41,22 +41,25 @@ class AnthologySqlite(object):
     def create_tables(self):
         self.db_connect()
         # conferences
-        self.cursor.execute('''create table if not exists conference(id integer primary key, 
-        conf_content char(20) not null, 
-        venue char(20)， 
-        year integer, 
-        link char(50), 
-        volume_size integer);''')
+        self.cursor.execute('''create table if not exists conference(id integer primary key auto_increment, 
+                                conf_content char(20) not null, 
+                                venue char(20), 
+                                year integer, 
+                                link char(50), 
+                                volume_size integer);
+                            ''')
         # papers
-        self.cursor.execute('''create table if not exists paper(id int primary key, 
-        title char(100) not null, 
-        year integer, 
-        url char(50), 
-        authors text, 
-        abstract text);''')
+        self.cursor.execute('''create table if not exists paper(id int primary key auto_increment, 
+                                title char(100) not null, 
+                                year integer, 
+                                url char(50), 
+                                authors text, 
+                                abstract text,
+                                conf_content varchar(20));
+                            ''')
         self.db_disconnect()
 
-    def sqlite_shell(self):
+    def shell(self):
         self.db_connect()
 
         buffer = ""

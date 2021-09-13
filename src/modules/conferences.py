@@ -37,9 +37,10 @@ class Conference(object):
 
 
 class ConfContent(object):
-    def __init__(self, name, full_name, year, link, volume_size):
+    def __init__(self, name, full_name, venue, year, link, volume_size):
         self.name = name
         self.full_name = full_name
+        self.venue = venue
         self.year = year
         self.link = link
         self.volume_size = volume_size
@@ -121,7 +122,7 @@ class Anthology(object):
                     link = f'{self.homepage_url}{href}'
                     #   is blank for html.
                     volume_size = int(content.find("span").get_text().split(" ")[0].strip())
-                    conf.conf_contents[year].append(ConfContent(name, full_name, year, link, volume_size))
+                    conf.conf_contents[year].append(ConfContent(name, full_name, conf.name, year, link, volume_size))
 
     def add_logger(self, logger: MyLogger):
         self.logger = logger

@@ -85,7 +85,6 @@ class LocalCache(Cache):
         else:
             self._logger.warning(f'load failed. "{local_path} does not exist."')
 
-
     def clear(self):
         """
         :return:
@@ -105,4 +104,3 @@ class LocalCache(Cache):
         new.load(local_path)
         new.local_path = local_path  # record this local_path, it is useful when make clear.
         return new
-

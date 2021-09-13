@@ -6,14 +6,15 @@ from src.modules import Retriever
 from src.modules.constants import ACLConsts
 from src.modules.downloader import PaperDownloader
 from src.modules.anthology_sqlite import AnthologySqlite
+from src.modules.anthology_mysql import AnthologyMySQL
 
 class BaseTask(object):
     @classmethod
     def run(cls):
-        sqlite = AnthologySqlite()
-        sqlite.create_tables()
-        sqlite.sqlite_shell()
-
+        db = AnthologyMySQL(cache_enable=True)
+        db.create_tables()
+        db.load_data()  # 将数据爬取载入数据库中
+        print(db.get_conferences())
 
         # downloader = PaperDownloader()
         #
