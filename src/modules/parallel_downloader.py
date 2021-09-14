@@ -32,7 +32,7 @@ class PaperDownloader(object):
         try:
             prefix = os.path.join(download_dir, prefix_path)
             os.makedirs(prefix, exist_ok=True)
-            fpath = os.path.join(prefix, f'{StringTools.fileNameNorm(paper.title)}.pdf')
+            fpath = os.path.join(prefix, f'{StringTools.filename_norm(paper.title)}.pdf')
             r = requests.get(paper.url)
             with open(fpath, "wb") as f:
                 f.write(r.content)

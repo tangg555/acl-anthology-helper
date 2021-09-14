@@ -1,0 +1,1 @@
+print(sum([True, True, False]))

@@ -4,8 +4,16 @@ class StringTools(object):
         return one.lower() == two.lower()
 
     @classmethod
-    def contain(cls, subj: str, obj: str):
-        return obj.lower() in subj.lower()
+    def contain(cls, text: str, keyword: str):
+        return keyword.lower() in text.lower()
+
+    @classmethod
+    def multi_or_contain(cls, text: str, keywords: list):
+        return bool(sum([one.lower() in text.lower() for one in keywords]))
+
+    @classmethod
+    def multi_and_contain(cls, text: str, keywords: list):
+        return bool(sum([one.lower() in text.lower() for one in keywords]) == len(keywords))
 
     @classmethod
     def isssymbols(cls, c: chr):
@@ -26,5 +34,5 @@ class StringTools(object):
         return False if c in "\\/:*?*<>|" else True
 
     @classmethod
-    def fileNameNorm(cls, string: str):
+    def filename_norm(cls, string: str):
         return ''.join(filter(cls._is_valid_for_file, string))

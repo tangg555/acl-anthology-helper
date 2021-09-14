@@ -11,7 +11,8 @@ from src.modules.papers import Paper, PaperList
 from src.modules.anthology_mysql import AnthologyMySQL
 from src.common.database_tools import MySQLTools
 
-class BaseTask(object):
+
+class BasicTask(object):
     @classmethod
     def load_data_to_db(cls):
         """
@@ -22,14 +23,13 @@ class BaseTask(object):
         db.load_data()  # 将数据爬取载入数据库中
 
     @classmethod
-    def query_papers(cls, keyword: str):
+    def query_papers(cls, keyword: str, conf_contents: list):
         """
         检索论文
         """
-        conf_contents = ['ACL', 'EMNLP', 'TACL', 'NAACL']
         years_limit = tuple(range(2016, 2022))
-        data = ABuilder().table('paper')\
-            .where({"year": ["in", years_limit]})\
+        data = ABuilder().table('paper') \
+            .where({"year": ["in", years_limit]}) \
             .where({"venue": ["in", conf_contents]}).query()
         papers = MySQLTools.list_to_papers(data)
         filtered = papers.containing_filter('title', keyword) | papers.containing_filter('abstract', keyword)
@@ -45,18 +45,21 @@ class BaseTask(object):
 
     @classmethod
     def run(cls):
-        # cls.load_data_to_db()
+        cls.load_data_to_db()
+        downloader = PaperDownloader()
+        conf_contents_limit = ['ACL', 'EMNLP', 'TACL', 'NAACL']
         while True:
-            keyword = input('type a keyword(blank will exit): ')
+            keyword = input('\ntype a keyword(blank will exit): ')
             if not keyword.strip():
                 break
-            papers = cls.query_papers(keyword)
+            papers = cls.query_papers(keyword, conf_contents_limit)
             print(f'The size of papers: {papers.size}')
-        # downloader = PaperDownloader()
-        #
-        # filtered = papers.filter('title', 'commonsense') | papers.filter('abstract', 'commonsense')
-        # downloader.multi_download(filtered, os.path.join(ACLConsts.LONG, 'commonsense_title_or_abstract'))
+
+            group = papers.group('conf_content')
+
+            for conf_content, papers_obj in group.items():
+                downloader.multi_download(papers_obj, os.path.join(keyword, conf_content))
 
 
 if __name__ == '__main__':
-    BaseTask.run()
+    BasicTask.run()

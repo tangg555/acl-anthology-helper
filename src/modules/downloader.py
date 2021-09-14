@@ -16,8 +16,8 @@ from src.common.file_tools import FileTools
 
 class Downloader(object):
     def __init__(self, download_dir='./download', logger=None):
-        self._download_dir = download_dir
-        self._logger = logger if logger else MyLogger('downloader', DEBUG)
+        self.download_dir = download_dir
+        self.logger = logger if logger else MyLogger('downloader', DEBUG)
 
     def set_downlard_dir(self, path):
         pass
@@ -33,18 +33,18 @@ class PaperDownloader(Downloader):
     def set_downlard_dir(self, download_dir: str):
         if not os.path.isdir(download_dir):
             raise FileExistsError(f'The input directory -{download_dir}- is invalid.')
-        self._download_dir = download_dir
+        self.download_dir = download_dir
 
     def download(self, paper: Paper, prefix_dir, verbose=False):
-        prefix = os.path.join(self._download_dir, prefix_dir)
+        prefix = os.path.join(self.download_dir, prefix_dir)
         if not os.path.exists(prefix):
             os.makedirs(prefix)
-        fpath = os.path.join(prefix, f'{StringTools.fileNameNorm(paper.title)}.pdf')
+        fpath = os.path.join(prefix, f'{StringTools.filename_norm(paper.title)}.pdf')
         r = requests.get(paper.url)
         with open(fpath, "wb") as f:
             f.write(r.content)
         if verbose:
-            self._logger.info(f'paper downloaded at {fpath}')
+            self.logger.info(f'paper downloaded at {fpath}')
 
     def multi_download(self, papers: PaperList, prefix_dir, verbose=False):
         """
@@ -54,7 +54,7 @@ class PaperDownloader(Downloader):
         :return:
         without multiprocessing.
         """
-        self._logger.info(f'Papers multi_download(without multi-processing) starts, papers: {papers.size}')
+        self.logger.info(f'Papers multi_download(without multi-processing) starts, papers: {papers.size}')
         success = 0
         fails = []
         for paper in tqdm(papers, desc=f"multi downloading", total=papers.size):
@@ -62,10 +62,10 @@ class PaperDownloader(Downloader):
                 self.download(paper, prefix_dir)
                 success += 1
             except Exception as e:
-                self._logger.warning(f'{paper} download failed, the exception is :{e}')
+                self.logger.warning(f'{paper} download failed, the exception is :{e}')
                 fails.append(paper)
-        self._logger.info('All subprocesses done.')
-        prefix = os.path.join(self._download_dir, prefix_dir)
+        self.logger.info('All subprocesses done.')
+        prefix = os.path.join(self.download_dir, prefix_dir)
         FileTools.info_to_file(papers, os.path.join(prefix, 'papers_info.txt'))
         FileTools.info_to_file(f'{success} downloaded, total: {papers.size}\nfailed papers:\n{fails}',
                                os.path.join(prefix, 'download_info.txt'))

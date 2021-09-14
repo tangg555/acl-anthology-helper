@@ -37,7 +37,7 @@ class ParallelDownloadTask(object):
     @classmethod
     def run(cls):
         while True:
-            keyword = input('type a keyword(blank will exit): ')
+            keyword = input('\ntype a keyword(blank will exit): ')
             if not keyword.strip():
                 break
             cls.acl_long_download(keyword)

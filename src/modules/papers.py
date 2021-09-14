@@ -120,6 +120,10 @@ class PaperList(object):
     def add_logger(self, logger: MyLogger):
         self.logger = logger
 
+    '''
+    ============================ filters ============================
+    '''
+
     def containing_filter(self, attr: str, keyword: str):
         filtered = []
         for paper in self.papers:
@@ -128,8 +132,42 @@ class PaperList(object):
                 filtered.append(paper)
         if isinstance(self.logger, MyLogger):
             self.logger.info(
-                f'filtered by containing "{keyword}" in {attr} for {len(self.papers)}, remaining {len(filtered)}')
+                f'filtered by containing "{keyword}" in {attr} for {len(self.papers)} papers,'
+                f' remaining {len(filtered)}')
         return PaperList(filtered)
+
+    def or_containing_filter(self, attr: str, keywords: list):
+        filtered = []
+        for paper in self.papers:
+            if StringTools.multi_or_contain(eval(f'paper.{attr}'), keywords):
+                paper.add_desc(f'filtered by containing [{" or ".join(keywords)}] in {attr}')
+                filtered.append(paper)
+        if isinstance(self.logger, MyLogger):
+            self.logger.info(
+                f'filtered by containing [{" or ".join(keywords)}] in {attr} for {len(self.papers)} papers,'
+                f' remaining {len(filtered)}')
+        return PaperList(filtered)
+
+    def and_containing_filter(self, attr: str, keywords: list):
+        filtered = []
+        for paper in self.papers:
+            if StringTools.multi_and_contain(eval(f'paper.{attr}'), keywords):
+                paper.add_desc(f'filtered by containing [{" and ".join(keywords)}] in {attr}')
+                filtered.append(paper)
+        if isinstance(self.logger, MyLogger):
+            self.logger.info(
+                f'filtered by containing [{" and ".join(keywords)}] in {attr} for {len(self.papers)} papers,'
+                f' remaining {len(filtered)}')
+        return PaperList(filtered)
+
+    def group(self, attr: str) -> dict:
+        group_dict = {}
+        for paper in self.papers:
+            key = eval(f'paper.{attr}')
+            if key not in group_dict:
+                group_dict[key] = PaperList(papers=[])
+            group_dict[key].papers.append(paper)
+        return group_dict
 
     def items(self):
         return self.papers
