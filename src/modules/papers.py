@@ -120,15 +120,15 @@ class PaperList(object):
     def add_logger(self, logger: MyLogger):
         self.logger = logger
 
-    def filter(self, key: str, val: str):
+    def containing_filter(self, attr: str, keyword: str):
         filtered = []
         for paper in self.papers:
-            if StringTools.contain(eval(f'paper.{key}'), val):
-                paper.add_desc(f'filtered by containing "{val}" in {key}')
+            if StringTools.contain(eval(f'paper.{attr}'), keyword):
+                paper.add_desc(f'filtered by containing "{keyword}" in {attr}')
                 filtered.append(paper)
         if isinstance(self.logger, MyLogger):
             self.logger.info(
-                f'filtered by containing "{val}" in {key} for {len(self.papers)}, remaining {len(filtered)}')
+                f'filtered by containing "{keyword}" in {attr} for {len(self.papers)}, remaining {len(filtered)}')
         return PaperList(filtered)
 
     def items(self):

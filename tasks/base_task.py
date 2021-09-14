@@ -4,10 +4,12 @@
 https://github.com/lizhenggan/ABuilder
 """
 
+import os
+from ABuilder.ABuilder import ABuilder
 from src.modules.downloader import PaperDownloader
 from src.modules.papers import Paper, PaperList
 from src.modules.anthology_mysql import AnthologyMySQL
-from ABuilder.ABuilder import ABuilder
+from src.common.database_tools import MySQLTools
 
 class BaseTask(object):
     @classmethod
@@ -20,7 +22,7 @@ class BaseTask(object):
         db.load_data()  # 将数据爬取载入数据库中
 
     @classmethod
-    def query_papers(cls):
+    def query_papers(cls, keyword: str):
         """
         检索论文
         """
@@ -29,25 +31,27 @@ class BaseTask(object):
         data = ABuilder().table('paper')\
             .where({"year": ["in", years_limit]})\
             .where({"venue": ["in", conf_contents]}).query()
-        print(data)
-        return data
+        papers = MySQLTools.list_to_papers(data)
+        filtered = papers.containing_filter('title', keyword) | papers.containing_filter('abstract', keyword)
+        return filtered
 
     @classmethod
-    def download_papers(cls, papers: PaperList):
+    def download_papers(cls, papers: PaperList, keyword, conf_content):
         """
         检索论文
         """
-        pass
-        # downloader = PaperDownloader()
-        #
-        # filtered = papers.filter('title', 'commonsense') | papers.filter('abstract', 'commonsense')
-        # downloader.multi_download(filtered, os.path.join(ACLConsts.LONG, 'commonsense_title_or_abstract'))
+        downloader = PaperDownloader()
+        downloader.multi_download(papers, os.path.join(keyword, conf_content))
 
     @classmethod
     def run(cls):
-        cls.load_data_to_db()
-        cls.query_papers()
-
+        # cls.load_data_to_db()
+        while True:
+            keyword = input('type a keyword(blank will exit): ')
+            if not keyword.strip():
+                break
+            papers = cls.query_papers(keyword)
+            print(f'The size of papers: {papers.size}')
         # downloader = PaperDownloader()
         #
         # filtered = papers.filter('title', 'commonsense') | papers.filter('abstract', 'commonsense')

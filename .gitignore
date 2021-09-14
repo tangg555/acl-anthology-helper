@@ -1,12 +1,14 @@
 .idea
+.DS_Store
+.db
 log
 download
 toy
 cache
 database
-.db
 mysql_cfg.py
 database.py
-.DS_Store
+toy.py
+my_task.py
 *.pyc
 __pycache__
