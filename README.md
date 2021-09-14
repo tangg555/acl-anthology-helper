@@ -23,8 +23,8 @@ To help search, filter, and download papers from 'acl anthology' ([https://aclan
 - Download papers.
 <br> e.g. ``` downloader.multi_download(filtered, download_path)``` 
 - Local cache available.
-- log available.
-- statistics available (although I only count the total number of papers).
+- Log available.
+- Statistics available (although I only count the total number of papers).
 
 ## Get Started
 
