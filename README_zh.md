@@ -27,8 +27,24 @@ acl-anthology-helper的主要目的是快速地从'acl anthology' ([https://acla
 - 信息采集。
 
 ## 快速开始
+- 首先， 你需要安装[MySQL](https://dev.mysql.com/downloads/mysql/) ，我使用的是MySQL 8。
+<br>配置你的MySQL数据库，添加 ```src/configuration/mysql_cfg.py```文件。
+<br> ```src/configuration/mysql_cfg.py``` 的文件内容可以参考以下格式:
+```python3
+class MySQLCFG(object):
+    HOST = 'localhost'
+    PORT = 3306
+    USER = "root"
+    PASSWORD = "xxx"
+    DB = "xxx"
+``` 
+同时，在MySQL中创建相应的数据库。
 
-下载代码，打开终端切换至代码的根目录。
+- 如果你想使用 [ABuilder](https://github.com/lizhenggan/ABuilder) 对MySQL进行链式查询。
+<br>你需要写一个ABuilder的配置文件 ```tasks/database.py``` 。
+<br>具体内容你可以参考[ABuilder](https://github.com/lizhenggan/ABuilder).
+
+- 下载代码，打开终端切换至代码的根目录。
 运行
 ```python3
 pip install requirements.txt

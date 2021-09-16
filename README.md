@@ -14,7 +14,7 @@ To help search, filter, and download papers from 'acl anthology' ([https://aclan
 <br>```db = AnthologyMySQL(cache_enable=True)```
 <br>```db.create_tables()```
 <br>```db.load_data()  # load data and put into database``` 
-- Import [ABuilder](https://github.com/lizhenggan/ABuilder) to support chain operations for [MySQL](https://dev.mysql.com/downloads/mysql/.
+- Import [ABuilder](https://github.com/lizhenggan/ABuilder) to support chain operations for [MySQL](https://dev.mysql.com/downloads/mysql/).
 <br> e.g.
 <br>```data = ABuilder().table('paper').where({"year": ["in", years_limit]}).where({"venue": ["in", venue_limit]}).query()```
 - Filter papers with by keyword.
@@ -28,8 +28,26 @@ To help search, filter, and download papers from 'acl anthology' ([https://aclan
 
 ## Get Started
 
-Download and decompress the code, open a terminal and checkout to the root directory.
-run
+- Firstly. [MySQL](https://dev.mysql.com/downloads/mysql/) is required. Mine is MySQL 8.
+<br>Configurate your MySQL database and add a ```src/configuration/mysql_cfg.py```.
+<br>The content of ```src/configuration/mysql_cfg.py``` is as follows:
+```python3
+class MySQLCFG(object):
+    HOST = 'localhost'
+    PORT = 3306
+    USER = "root"
+    PASSWORD = "xxx"
+    DB = "xxx"
+``` 
+Meanwhile, create the corresponding database in your MySQL database.
+
+- Secondly. If you want to use [ABuilder](https://github.com/lizhenggan/ABuilder).
+<br>You need to write a ```tasks/database.py``` with configurations of you MySQL.
+<br>You can refer to the homepage of [ABuilder](https://github.com/lizhenggan/ABuilder).
+
+- Download and decompress the code, open a terminal and checkout to the root directory.
+<br>run
+
 ```python3
 pip install requirements.txt
 cd tasks
