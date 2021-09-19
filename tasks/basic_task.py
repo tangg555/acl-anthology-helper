@@ -3,6 +3,8 @@
 @Reference:
 https://github.com/lizhenggan/ABuilder
 """
+import sys
+sys.path.insert(0, '..') # 在tasks文件夹中可以直接运行程序
 
 import os
 from ABuilder.ABuilder import ABuilder

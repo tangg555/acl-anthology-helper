@@ -1,6 +1,9 @@
 """
 @Desc:
 """
+import sys
+sys.path.insert(0, '..') # 在tasks文件夹中可以直接运行程序
+
 import os
 from src.modules import Retriever
 from src.modules.parallel_downloader import PaperDownloader
