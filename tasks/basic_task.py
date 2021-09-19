@@ -25,11 +25,10 @@ class BasicTask(object):
         db.load_data()  # 将数据爬取载入数据库中
 
     @classmethod
-    def query_papers(cls, keyword: str, conf_contents: list):
+    def query_papers(cls, keyword: str, conf_contents: list, years_limit: list):
         """
         检索论文
         """
-        years_limit = tuple(range(2016, 2022))
         data = ABuilder().table('paper') \
             .where({"year": ["in", years_limit]}) \
             .where({"venue": ["in", conf_contents]}).query()
@@ -49,12 +48,13 @@ class BasicTask(object):
     def run(cls):
         cls.load_data_to_db()
         downloader = PaperDownloader()
+        years_limit = list(range(2016, 2022))
         conf_contents_limit = ['ACL', 'EMNLP', 'TACL', 'NAACL']
         while True:
             keyword = input('\ntype a keyword(blank will exit): ')
             if not keyword.strip():
                 break
-            papers = cls.query_papers(keyword, conf_contents_limit)
+            papers = cls.query_papers(keyword, conf_contents_limit, years_limit)
             print(f'The size of papers: {papers.size}')
 
             group = papers.group('conf_content')
