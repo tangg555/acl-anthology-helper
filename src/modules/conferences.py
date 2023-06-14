@@ -111,6 +111,8 @@ class Anthology(object):
             response = requests.get(conf.link)
             conf_html = Soup(response.content, "html.parser")
             for year_conf_html in conf_html.find_all("div", {"class", "row"}):
+                if year_conf_html.find("h4") is None:
+                    continue
                 year = year_conf_html.find("h4").get_text()  # year
                 conf.conf_contents[year] = []
                 # traverse contents

@@ -1,5 +1,4 @@
 tqdm
-requests
 PyMySQL
 beautifulsoup4
 a-sqlbuilder
