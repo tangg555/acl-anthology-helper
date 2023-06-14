@@ -41,31 +41,10 @@ class MySQLCFG(object):
 ``` 
 Meanwhile, create the corresponding database in your MySQL database.
 
-- Secondly. If you want to use [ABuilder](https://github.com/lizhenggan/ABuilder).
-<br>You need to write a ```tasks/database.py``` with configurations of you MySQL.
-<br>You can refer to the homepage of [ABuilder](https://github.com/lizhenggan/ABuilder).
-<br>Here is an example:
-```python3
-class Config(object):
-    pass
-
-class Proconfig(Config):
-    pass
-
-
-class Devconfig(Config):
-    debug = True
-    DATABASE_URI = 'mysql+pymysql://root:root@127.0.0.1:3306/{Your Target Database}}'
-    data_host = '127.0.0.1' 
-    data_pass = 'root'
-    data_user = 'root'
-    database = 'target'
-    data_port = 3306
-    charset = 'utf8mb4'
-
-
-database = Devconfig
-``` 
+~~- Secondly. If you want to use [ABuilder](https://github.com/lizhenggan/ABuilder).
+<br>You need to make a ```tasks/database.py``` with configurations of you MySQL.
+<br>You can refer to the homepage of [ABuilder](https://github.com/lizhenggan/ABuilder).~~
+<br>In the latest version, I made the ```tasks/database.py``` get info from the configuration. No need to make this file any more:
 
 - Download and decompress the code, open a terminal and checkout to the root directory.
 <br>run

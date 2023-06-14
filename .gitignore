@@ -7,7 +7,6 @@ toy
 cache
 database
 mysql_cfg.py
-database.py
 toy.py
 my_task.py
 *.pyc
