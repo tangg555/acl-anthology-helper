@@ -29,17 +29,18 @@ class MyTask(BasicTask):
         papers = MySQLTools.list_to_papers(data)
         filtered = papers
         for keyword in keywords:
-            filtered = filtered.containing_filter('title', keyword) \
-                       # | filtered.containing_filter('abstract', keyword)
+            filtered = filtered.containing_filter('title', keyword) | \
+                filtered.containing_filter('abstract', keyword)
         return filtered
 
     @classmethod
     def run(cls):
         # Survey for text generation
-        conf_contents_limit = ['ACL', 'EMNLP', 'NAACL', 'TACL']
+        conf_contents_limit = ['ACL', 'EMNLP', 'NAACL', 'Findings']
         downloader = PaperDownloader()
-        keywords = ['evaluation', 'generation']
-        years_limit = list(range(2016, 2022))
+        keywords = ['event', 'story generation']
+        years_limit = list(range(2021, 2023))
+        fields = ['title', 'abstract']
         papers = cls.multi_keywords_query_papers(keywords, conf_contents_limit, years_limit)
         downloader.logger.info(f'The size of papers: {papers.size}')
 

@@ -48,7 +48,7 @@ class BasicTask(object):
     def run(cls):
         cls.load_data_to_db()
         downloader = PaperDownloader()
-        years_limit = list(range(2016, 2022))
+        years_limit = list(range(2016, 2023))
         conf_contents_limit = ['ACL', 'EMNLP', 'TACL', 'NAACL']
         while True:
             keyword = input('\ntype a keyword(blank will exit): ')

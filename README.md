@@ -62,8 +62,19 @@ By running this code, this ```basic_task``` will firstly download all papers wit
 I develop this project by Python 3.6, and it doesn't support python 2. 
 
 **2023.6.14** The code is updated to support the lastest acl anthology pages. Current python version is 3.10 .
+**2023.7.2** Update the README.
 
-#### 2. Others
+#### 2. A survey paper is written with this tool
+```angular2
+@article{tang2022recent,
+  title={Recent advances in neural text generation: A task-agnostic survey},
+  author={Tang, Chen and Guerin, Frank and Li, Yucheng and Lin, Chenghua},
+  journal={arXiv preprint arXiv:2203.03047},
+  year={2022}
+}
+```
+
+#### 3. Others
 **homepage**
 
 ![](/images/aclanthology.png)
