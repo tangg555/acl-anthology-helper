@@ -51,21 +51,11 @@ pip install requirements.txt
 cd tasks
 python basic_task.py
 ``` 
+如果打算重新下载所有内容，请删除缓存目录 ```tasks/cache``` ，或者通过设置 ```cache_enable=False``` 来禁用缓存。
 
 ## 提示
 
 该项目用 Python 3.6 所写, 不支持 Python 2。
-**2023.6.14** The code is updated to support the lastest acl anthology pages. Current python version is 3.10 .
-**2023.7.2** Update the README.
-
-```angular2
-@article{tang2022recent,
-  title={Recent advances in neural text generation: A task-agnostic survey},
-  author={Tang, Chen and Guerin, Frank and Li, Yucheng and Lin, Chenghua},
-  journal={arXiv preprint arXiv:2203.03047},
-  year={2022}
-}
-```
 
 **ACL Anthology官网**
 

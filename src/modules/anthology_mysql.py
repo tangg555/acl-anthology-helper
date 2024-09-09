@@ -106,7 +106,7 @@ class AnthologyMySQL(object):
         self.logger.info("Start loading data...")
         for conf in itertools.chain(*self.anthology.confs.values()):
             # 该conf已经加载过
-            if self.cache and self.cache.get(conf.name, False):
+            if self.cache_enable and self.cache.get(conf.name, False):
                 self.logger.info(f"{conf.name} found in cache.")
                 continue
             else:
@@ -115,7 +115,7 @@ class AnthologyMySQL(object):
                                          total=conf.size,
                                          desc=f'loading {conf.name}...'):
                     # 该conf_content已经加载过
-                    if self.cache and self.cache.get(conf_content.name, False):
+                    if self.cache_enable and self.cache.get(conf_content.name, False):
                         continue
                     else:
                         papers = self.retriever.get_paper_list_from_volumes(conf_content.venue,
@@ -128,11 +128,13 @@ class AnthologyMySQL(object):
                     # 插入会议
                     self.insert_a_conf_content(conf_content)
                     self.conn.commit()  # 提交数据
-                    self.cache[conf_content.name] = True
+                    if self.cache_enable:
+                        self.cache[conf_content.name] = True
+                        self.cache.store()
+                if self.cache_enable:
+                    self.cache[conf.name] = True
                     self.cache.store()
-                self.cache[conf.name] = True
-                self.cache.store()
-                self.logger.info(f"Finished!")
+                    self.logger.info(f"Finished!")
         self.db_close_with_commit()
 
     def get_conferences(self):

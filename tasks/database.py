@@ -1,5 +1,3 @@
-from src.configuration.mysql_cfg import MySQLCFG
-
 class Config(object):
     pass
 
@@ -9,15 +7,13 @@ class Proconfig(Config):
 
 class Devconfig(Config):
     debug = True
-    DATABASE_URI = f'mysql+pymysql://{MySQLCFG.USER}:{MySQLCFG.USER}@{MySQLCFG.HOST}:{MySQLCFG.PORT}/{MySQLCFG.DB}'
-    data_host = MySQLCFG.HOST
-    data_pass = MySQLCFG.PASSWORD
-    data_user = MySQLCFG.USER
-    database = MySQLCFG.DB
-    data_port = MySQLCFG.PORT
+    DATABASE_URI = 'mysql+pymysql://root:root@127.0.0.1:3306/target'
+    data_host = '127.0.0.1'
+    data_pass = 'tang555111'
+    data_user = 'root'
+    database = 'acl'
+    data_port = 3306
     charset = 'utf8mb4'
 
 
 database = Devconfig
-
-

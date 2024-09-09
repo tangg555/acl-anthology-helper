@@ -29,8 +29,8 @@ To help search, filter, and download papers from 'acl anthology' ([https://aclan
 ## Get Started
 
 - Firstly. [MySQL](https://dev.mysql.com/downloads/mysql/) is required. Mine is MySQL 8.
-<br>Configurate your MySQL database and add a ```src/configuration/mysql_cfg.py``` file.
-<br>The example of ```src/configuration/mysql_cfg.py``` is as follows:
+<br>Configurate your MySQL database and add a ```src/configuration/mysql_cfg.py```.
+<br>The content of ```src/configuration/mysql_cfg.py``` is as follows:
 ```python3
 class MySQLCFG(object):
     HOST = 'localhost'
@@ -41,10 +41,9 @@ class MySQLCFG(object):
 ``` 
 Meanwhile, create the corresponding database in your MySQL database.
 
-~~- Secondly. If you want to use [ABuilder](https://github.com/lizhenggan/ABuilder).
-<br>You need to make a ```tasks/database.py``` with configurations of you MySQL.
-<br>You can refer to the homepage of [ABuilder](https://github.com/lizhenggan/ABuilder).~~
-<br>In the latest version, I made the ```tasks/database.py``` get info from the configuration. No need to make this file any more:
+- Secondly. If you want to use [ABuilder](https://github.com/lizhenggan/ABuilder).
+<br>You need to write a ```tasks/database.py``` with configurations of you MySQL.
+<br>You can refer to the homepage of [ABuilder](https://github.com/lizhenggan/ABuilder).
 
 - Download and decompress the code, open a terminal and checkout to the root directory.
 <br>run
@@ -54,27 +53,12 @@ pip install requirements.txt
 cd tasks
 python basic_task.py
 ``` 
-By running this code, this ```basic_task``` will firstly download all papers within a certain time span from Acl Anthology to the local disk, and then search papers by input key words.
+If you want to redownload everything, simply delete the cache directory at ```tasks/cache```  or turn off cache by setting ```cache_enable=False```. Then run ```python basic_task.py``` again.
 
 ## Note
 
-#### 1. Comments
-I develop this project by Python 3.6, and it doesn't support python 2. 
+I develop this project by Python 3.6, and it doesn't support python 2.
 
-**2023.6.14** The code is updated to support the lastest acl anthology pages. Current python version is 3.10 .
-**2023.7.2** Update the README.
-
-#### 2. A survey paper is written with this tool
-```angular2
-@article{tang2022recent,
-  title={Recent advances in neural text generation: A task-agnostic survey},
-  author={Tang, Chen and Guerin, Frank and Li, Yucheng and Lin, Chenghua},
-  journal={arXiv preprint arXiv:2203.03047},
-  year={2022}
-}
-```
-
-#### 3. Others
 **homepage**
 
 ![](/images/aclanthology.png)
